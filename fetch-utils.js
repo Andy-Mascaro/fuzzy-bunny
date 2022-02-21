@@ -9,7 +9,7 @@ export function getUser() {
 }
 
 export async function getFamilies() {
-    const resp = await client.from('loving_families').select().order('id');
+    const resp = await client.from('loving_families').select('*,fuzzy_bunnies (*)').match({ 'fuzzy_bunnies.user_id': client.auth.session().user_id});
     return checkError(resp);
     // fetch all families and their bunnies
 
@@ -17,13 +17,16 @@ export async function getFamilies() {
 }
 
 export async function deleteBunny(id) {
-    const resp = await client.from()
+    const resp = await client.from('fuzzy_bunnies').delete().match({ id: id }).single();
+        
     // delete a single bunny using the id argument
 
     return checkError(resp);
 }
 
 export async function createBunny(bunny) {
+    const resp = await client.from('fuzzy_bunnies').insert({ description: bunny, complete: false, user_id: client.auth.user().id });
+
 
     // create a bunny using the bunny argument
 
