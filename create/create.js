@@ -7,8 +7,10 @@ const logoutButton = document.getElementById('logout');
 form.addEventListener('submit', async e => {
     e.preventDefault();
     const formData = new FormData(form);
-    const bunny = formData.get('bunny');
-    await createBunny(bunny);
+    const familyId = formData.get('family-id');
+    const name = formData.get('bunny-name');
+
+    await createBunny({ name: name, family_id: familyId });
     // prevent default
 
     // get the name and family id from the form
@@ -17,14 +19,26 @@ form.addEventListener('submit', async e => {
     
     form.reset();
 });
-async function displayOptions() {
-    const selectElem = document.getElementById('family-id');
-    const 
-}
+
+
+
+
 window.addEventListener('load', async () => {
+    const select = document.querySelector('select');
+    const families = await getFamilies();
+
+    for (let family of families) {
+        const option = document.createElement('option');
+
+        option.value = family.id;
+        option.textContent = family.name;
+
+        select.append(option);
+
+    }
     
 
-
+});
     // let's dynamically fill in the families dropdown from supabase
     // grab the select HTML element from the DOM
 
@@ -37,7 +51,7 @@ window.addEventListener('load', async () => {
     // set the option's value and text content
 
     // and append the option to the select
-});
+
 
 
 checkAuth();
